@@ -44,6 +44,15 @@
   @keyframes leaf-sway { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(4deg) translateY(-8px)} }
   .leaf { animation:leaf-sway 7s ease-in-out infinite; transform-origin:bottom center; }
 
+  /* ============ 3D-Falling-Leaves: fallen (outer) + Wind-Schwanken (mid) + 3D-Taumeln (inner) ============ */
+  #leaves { position:absolute; inset:0; overflow:hidden; pointer-events:none; perspective:600px; }
+  .fleaf { position:absolute; top:-60px; will-change:transform; animation:fleaf-fall linear infinite; }
+  @keyframes fleaf-fall { from{transform:translateY(0)} to{transform:translateY(var(--fall,900px))} }
+  .fleaf-sway { animation:fleaf-sway ease-in-out infinite alternate; }
+  @keyframes fleaf-sway { from{transform:translateX(calc(var(--sway,40px) * -1))} to{transform:translateX(var(--sway,40px))} }
+  .fleaf-spin { display:block; transform-style:preserve-3d; animation:fleaf-spin linear infinite; }
+  @keyframes fleaf-spin { from{transform:rotate3d(var(--rx,1),var(--ry,1),var(--rz,0),0deg)} to{transform:rotate3d(var(--rx,1),var(--ry,1),var(--rz,0),360deg)} }
+
   /* ============ CTA (Glow + Sheen + Pfeil) ============ */
   .cta-primary { position:relative; overflow:hidden; background:linear-gradient(100deg,#8CC63F,#5E9421); color:#0D1026;
     box-shadow:0 10px 30px -10px rgba(140,198,63,.55), 0 4px 14px -6px rgba(94,148,33,.4);
@@ -151,6 +160,8 @@
     <!-- dezente Blätter -->
     <svg class="leaf absolute bottom-8 left-[6%] w-14 h-14 opacity-25 hidden sm:block" viewBox="0 0 24 24" fill="#8CC63F"><path d="M17 8C8 10 5.9 16.2 3.8 21.3l1.9.7C6.7 19.7 8 18 10 16c-.3 2 .5 3.5 2 4.5 5-1 9-5.5 9-12.5-2 0-3 .5-4 0z"/></svg>
     <svg class="leaf absolute top-40 right-[5%] w-10 h-10 opacity-20 hidden sm:block" style="animation-delay:1.6s" viewBox="0 0 24 24" fill="#8CC63F"><path d="M17 8C8 10 5.9 16.2 3.8 21.3l1.9.7C6.7 19.7 8 18 10 16c-.3 2 .5 3.5 2 4.5 5-1 9-5.5 9-12.5-2 0-3 .5-4 0z"/></svg>
+    <!-- 3D fallende Blätter (per JS befüllt) -->
+    <div id="leaves" aria-hidden="true"></div>
   </div>
   <div class="relative max-w-5xl mx-auto px-5 text-center">
     <span class="hero-in d1 inline-flex items-center gap-2 mono-label text-lime border border-lime/30 bg-lime/10 rounded-full px-4 py-1.5 mb-8">
@@ -588,6 +599,44 @@
   if (callbar) {
     function onBar(){ callbar.classList.toggle('show', window.scrollY > 420); }
     window.addEventListener('scroll', onBar, { passive:true }); onBar();
+  }
+
+  // ----- 3D-Falling-Leaves im Hero -----
+  var leavesWrap = document.getElementById('leaves');
+  if (leavesWrap && !reduceMotion) {
+    var LEAF_PATH = 'M17 8C8 10 5.9 16.2 3.8 21.3l1.9.7C6.7 19.7 8 18 10 16c-.3 2 .5 3.5 2 4.5 5-1 9-5.5 9-12.5-2 0-3 .5-4 0z';
+    var TONES = ['#8CC63F','#A5D65E','#6FA82F','#5E9421'];
+    var isMobile = window.innerWidth < 640;
+    var COUNT = isMobile ? 7 : 12;
+    var heroH = leavesWrap.offsetHeight + 120;
+    for (var i = 0; i < COUNT; i++) {
+      var depth = Math.random();                     // 0 = Hintergrund, 1 = Vordergrund
+      var size = 12 + depth * 22;                    // 12–34px
+      var fall = document.createElement('span');
+      fall.className = 'fleaf';
+      fall.style.left = (Math.random() * 100) + '%';
+      fall.style.setProperty('--fall', heroH + 'px');
+      fall.style.animationDuration = (14 - depth * 6 + Math.random() * 4) + 's'; // vorne schneller
+      fall.style.animationDelay = (-Math.random() * 16) + 's';                    // sofort verteilt statt Start-Regen
+      fall.style.opacity = (0.25 + depth * 0.5).toFixed(2);
+      if (depth < 0.35) fall.style.filter = 'blur(1.2px)';                        // Tiefenunschärfe hinten
+      var sway = document.createElement('span');
+      sway.className = 'fleaf-sway';
+      sway.style.display = 'block';
+      sway.style.setProperty('--sway', (18 + Math.random() * 42) + 'px');
+      sway.style.animationDuration = (2.2 + Math.random() * 2.4) + 's';
+      sway.style.animationDelay = (-Math.random() * 4) + 's';
+      var spin = document.createElement('span');
+      spin.className = 'fleaf-spin';
+      spin.style.setProperty('--rx', Math.random().toFixed(2));
+      spin.style.setProperty('--ry', Math.random().toFixed(2));
+      spin.style.setProperty('--rz', (Math.random() * 0.6).toFixed(2));
+      spin.style.animationDuration = (2.6 + Math.random() * 3.4) + 's';
+      spin.innerHTML = '<svg width="' + size.toFixed(0) + '" height="' + size.toFixed(0) + '" viewBox="0 0 24 24" fill="' + TONES[i % TONES.length] + '"><path d="' + LEAF_PATH + '"/></svg>';
+      sway.appendChild(spin);
+      fall.appendChild(sway);
+      leavesWrap.appendChild(fall);
+    }
   }
 
   // ----- Card spotlight position -----

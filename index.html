@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Impeccable Gardens — Professional Garden Care in London &amp; Kent</title>
+<meta name="description" content="From overgrown to immaculate. Professional garden maintenance, lawn care, clearance and planting for London & Kent homes. Rated 5.0 on Google. Free quotes." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,700;0,800;1,700;1,800;1,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','sans-serif'], display: ['Archivo','ui-sans-serif','sans-serif'] },
+      colors: {
+        navy:'#0D1026', navy2:'#141833', ink:'#101323',
+        lime:'#8CC63F', limeDeep:'#5E9421', limeSoft:'#EAF5DC',
+        blue:'#3B82F6', blueDeep:'#1D4ED8',
+        paper:'#F4F6F1', line:'#E3E8DD', mute:'#5C6470',
+      },
+    }},
+  }
+</script>
+<style>
+  html { scroll-behavior:smooth; }
+  /* clip statt hidden — hidden macht body zum Scroll-Container und friert Fenster-Scrolling ein */
+  html, body { overflow-x:clip; }
+  body { background:#F4F6F1; color:#101323; }
+  .display-it { font-family:'Archivo',sans-serif; font-style:italic; font-weight:900; letter-spacing:-.01em; }
+  .wordmark-sub { letter-spacing:.42em; font-weight:600; }
+  .mono-label { font-family:'Inter',sans-serif; font-weight:600; letter-spacing:.16em; text-transform:uppercase; font-size:11px; }
+
+  /* ============ Reveal on scroll ============ */
+  .rv { opacity:0; transform:translateY(22px); transition:opacity .7s ease-out, transform .7s cubic-bezier(.22,.61,.36,1); }
+  .rv.in { opacity:1; transform:none; }
+
+  /* ============ Hero ============ */
+  @keyframes hero-up { from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:none} }
+  .hero-in { opacity:0; animation:hero-up .85s cubic-bezier(.22,.61,.36,1) forwards; }
+  .hero-in.d1{animation-delay:.05s} .hero-in.d2{animation-delay:.16s} .hero-in.d3{animation-delay:.3s} .hero-in.d4{animation-delay:.44s} .hero-in.d5{animation-delay:.6s}
+  @keyframes orb-drift { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-14px,16px) scale(1.05)} }
+  .orb { animation:orb-drift 12s ease-in-out infinite; }
+  @keyframes leaf-sway { 0%,100%{transform:rotate(-3deg) translateY(0)} 50%{transform:rotate(4deg) translateY(-8px)} }
+  .leaf { animation:leaf-sway 7s ease-in-out infinite; transform-origin:bottom center; }
+
+  /* ============ CTA (Glow + Sheen + Pfeil) ============ */
+  .cta-primary { position:relative; overflow:hidden; background:linear-gradient(100deg,#8CC63F,#5E9421); color:#0D1026;
+    box-shadow:0 10px 30px -10px rgba(140,198,63,.55), 0 4px 14px -6px rgba(94,148,33,.4);
+    transition:box-shadow .35s, filter .2s, transform .25s cubic-bezier(.22,.61,.36,1); }
+  .cta-primary:hover { filter:brightness(1.04); box-shadow:0 18px 46px -12px rgba(140,198,63,.7), 0 8px 20px -6px rgba(94,148,33,.5); }
+  .cta-primary::before { content:""; position:absolute; top:-2px; bottom:-2px; left:-85%; width:45%;
+    background:linear-gradient(105deg, transparent, rgba(255,255,255,.45), transparent);
+    transform:skewX(-20deg); pointer-events:none; animation:cta-sheen 5s ease-in-out infinite; }
+  @keyframes cta-sheen { 0%{left:-85%} 20%{left:135%} 100%{left:135%} }
+  .cta-arrow { transition:background-color .3s; }
+  .cta-arrow svg { transition:transform .3s cubic-bezier(.22,.61,.36,1); }
+  .cta-primary:hover .cta-arrow svg { transform:translateX(3px); }
+  .cta-ghost { transition:border-color .3s, box-shadow .3s, background-color .3s; }
+  .cta-ghost:hover { border-color:rgba(140,198,63,.6); box-shadow:0 10px 30px -14px rgba(140,198,63,.35); }
+
+  /* ============ Cards ============ */
+  .card { background:#fff; border:1px solid #E3E8DD; }
+  .card-hover { position:relative; transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s, border-color .35s; }
+  .card-hover:hover { transform:translateY(-4px); border-color:#CDE3A8; box-shadow:0 18px 46px -20px rgba(94,148,33,.28); }
+  .card-hover::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(140,198,63,.12), transparent 65%);
+    opacity:0; transition:opacity .35s; }
+  .card-hover:hover::after { opacity:1; }
+
+  /* ============ Nav ============ */
+  #nav { transition:box-shadow .3s, background-color .3s; }
+  #nav.scrolled { box-shadow:0 8px 30px -14px rgba(13,16,38,.25); }
+  #scroll-progress { position:fixed; top:0; left:0; width:100%; height:2.5px; z-index:60; pointer-events:none;
+    background:linear-gradient(90deg,#8CC63F,#3B82F6); transform:scaleX(0); transform-origin:left; }
+
+  /* ============ Before/After Slider ============ */
+  .ba { position:relative; overflow:hidden; user-select:none; touch-action:pan-y; cursor:ew-resize; }
+  .ba-after { position:absolute; inset:0; clip-path:inset(0 0 0 var(--cut,50%)); }
+  .ba-handle { position:absolute; top:0; bottom:0; left:var(--cut,50%); width:2.5px; background:#fff; transform:translateX(-50%);
+    box-shadow:0 0 20px rgba(0,0,0,.35); }
+  .ba-knob { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:9999px;
+    background:#fff; display:grid; place-items:center; box-shadow:0 6px 22px rgba(13,16,38,.35); color:#0D1026; }
+  .ba-tag { position:absolute; top:14px; padding:5px 12px; border-radius:9999px; font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
+
+  /* ============ Review stars ============ */
+  .star { color:#F6BB06; }
+
+  /* ============ FAQ ============ */
+  .faq-body { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.22,.61,.36,1); }
+  .faq-icon { transition:transform .3s; }
+  .faq.open .faq-icon { transform:rotate(45deg); }
+  .faq { transition:border-color .3s; }
+  .faq:hover { border-color:rgba(140,198,63,.5); }
+
+  /* ============ Marquee (Review-Snippets) — mit gap-Kompensation ============ */
+  .marquee { display:flex; gap:3rem; width:max-content; animation:scroll 32s linear infinite; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(calc(-50% - 1.5rem))} }
+  .marquee-wrap:hover .marquee { animation-play-state:paused; }
+  .fade-x { -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+
+  /* ============ Step line ============ */
+  .step-line { transform:scaleX(0); transform-origin:left; transition:transform 1.2s cubic-bezier(.32,.72,0,1) .2s; }
+  .steps-section.is-visible .step-line { transform:scaleX(1); }
+
+  /* ============ Mobile sticky call bar ============ */
+  #callbar { transform:translateY(110%); transition:transform .4s cubic-bezier(.22,.61,.36,1); }
+  #callbar.show { transform:none; }
+
+  /* ============ Reduced Motion ============ */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-in, .rv { opacity:1 !important; transform:none !important; transition:none !important; animation:none !important; }
+    .orb, .leaf, .marquee { animation:none !important; }
+    .cta-primary::before { display:none; }
+    #scroll-progress { display:none; }
+    .step-line { transform:scaleX(1) !important; }
+    html { scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body class="font-sans antialiased selection:bg-lime/30">
+
+<div id="scroll-progress"></div>
+
+<!-- ============ NAV ============ -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-paper/85 border-b border-line">
+  <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+    <a href="#top" class="leading-none">
+      <span class="display-it text-[19px] text-ink">IMPECCABLE</span>
+      <span class="block wordmark-sub text-[9px] text-limeDeep mt-0.5">GARDENS</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-sm text-mute font-medium">
+      <a href="#services" class="hover:text-ink transition">Services</a>
+      <a href="#results" class="hover:text-ink transition">Results</a>
+      <a href="#reviews" class="hover:text-ink transition">Reviews</a>
+      <a href="#areas" class="hover:text-ink transition">Areas</a>
+      <a href="#faq" class="hover:text-ink transition">FAQ</a>
+    </nav>
+    <a href="tel:+447554893598" class="cta-primary text-sm font-bold pl-4 pr-1.5 py-1.5 rounded-full inline-flex items-center gap-2">
+      <span class="hidden sm:inline">07554 893598</span><span class="sm:hidden">Call now</span>
+      <span class="cta-arrow grid place-items-center w-6 h-6 rounded-full bg-navy/15"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.5 2.9.7a2 2 0 0 1 1.6 2z"/></svg></span>
+    </a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="relative pt-36 pb-20 bg-navy text-white">
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+    <div class="orb absolute -top-24 right-[10%] w-[440px] h-[440px] rounded-full bg-lime/15 blur-[130px]"></div>
+    <div class="orb absolute top-[45%] -left-24 w-[360px] h-[360px] rounded-full bg-blue/15 blur-[120px]" style="animation-delay:2.5s"></div>
+    <!-- dezente Blätter -->
+    <svg class="leaf absolute bottom-8 left-[6%] w-14 h-14 opacity-25 hidden sm:block" viewBox="0 0 24 24" fill="#8CC63F"><path d="M17 8C8 10 5.9 16.2 3.8 21.3l1.9.7C6.7 19.7 8 18 10 16c-.3 2 .5 3.5 2 4.5 5-1 9-5.5 9-12.5-2 0-3 .5-4 0z"/></svg>
+    <svg class="leaf absolute top-40 right-[5%] w-10 h-10 opacity-20 hidden sm:block" style="animation-delay:1.6s" viewBox="0 0 24 24" fill="#8CC63F"><path d="M17 8C8 10 5.9 16.2 3.8 21.3l1.9.7C6.7 19.7 8 18 10 16c-.3 2 .5 3.5 2 4.5 5-1 9-5.5 9-12.5-2 0-3 .5-4 0z"/></svg>
+  </div>
+  <div class="relative max-w-5xl mx-auto px-5 text-center">
+    <span class="hero-in d1 inline-flex items-center gap-2 mono-label text-lime border border-lime/30 bg-lime/10 rounded-full px-4 py-1.5 mb-8">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      London &amp; Kent
+    </span>
+    <h1 class="hero-in d2 display-it text-4xl sm:text-6xl leading-[1.05]">
+      From overgrown<br class="sm:hidden"> to <span class="text-lime">immaculate.</span>
+    </h1>
+    <p class="hero-in d3 mt-7 text-lg text-white/70 max-w-2xl mx-auto">
+      Professional garden care for London &amp; Kent homes — maintenance, clearance, lawns and planting.
+      Message us today, get your free quote within 24 hours.
+    </p>
+    <div class="hero-in d4 mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="https://wa.me/447554893598?text=Hi%2C%20I%27d%20like%20a%20free%20quote%20for%20my%20garden" class="cta-primary font-bold pl-7 pr-2 py-2.5 rounded-full inline-flex items-center gap-3 justify-center">
+        Get a free quote
+        <span class="cta-arrow grid place-items-center w-9 h-9 rounded-full bg-navy/15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a href="tel:+447554893598" class="cta-ghost font-semibold px-7 py-3.5 rounded-full border border-white/25 text-white inline-flex items-center gap-2.5 justify-center">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.5 2.9.7a2 2 0 0 1 1.6 2z"/></svg>
+        Call Ubaid
+      </a>
+    </div>
+    <div class="hero-in d5 mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/60">
+      <span class="inline-flex items-center gap-2">
+        <span class="star text-base leading-none">★★★★★</span>
+        <strong class="text-white">5.0</strong> on Google
+      </span>
+      <span class="hidden sm:inline text-white/25">·</span>
+      <span><strong class="text-white">35</strong> five-star reviews</span>
+      <span class="hidden sm:inline text-white/25">·</span>
+      <span>Your local gardener</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEW MARQUEE ============ -->
+<section class="marquee-wrap border-b border-line py-5 bg-white overflow-hidden">
+  <div class="fade-x">
+    <div class="marquee items-center text-sm text-mute">
+      <span class="whitespace-nowrap"><span class="star">★★★★★</span> “He did a great job and I would highly recommend him.” — Ellie</span>
+      <span class="whitespace-nowrap"><span class="star">★★★★★</span> “We were delighted with the result.” — Stephen</span>
+      <span class="whitespace-nowrap"><span class="star">★★★★★</span> “Truly the best gardening service I’ve ever had!” — Nicole</span>
+      <span class="whitespace-nowrap"><span class="star">★★★★★</span> 5.0 rating · 35 reviews on Google</span>
+      <span class="whitespace-nowrap" aria-hidden="true"><span class="star">★★★★★</span> “He did a great job and I would highly recommend him.” — Ellie</span>
+      <span class="whitespace-nowrap" aria-hidden="true"><span class="star">★★★★★</span> “We were delighted with the result.” — Stephen</span>
+      <span class="whitespace-nowrap" aria-hidden="true"><span class="star">★★★★★</span> “Truly the best gardening service I’ve ever had!” — Nicole</span>
+      <span class="whitespace-nowrap" aria-hidden="true"><span class="star">★★★★★</span> 5.0 rating · 35 reviews on Google</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section id="services" class="py-20">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="rv mono-label text-limeDeep">What we do</span>
+      <h2 class="rv display-it text-3xl sm:text-5xl mt-3">Everything your garden needs.</h2>
+      <p class="rv text-mute mt-5">One reliable local gardener for the lot — no juggling different trades.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-14">
+      <div class="rv card card-hover rounded-2xl p-7">
+        <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-limeSoft text-limeDeep"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8m0 0c0-3 2.5-5 5.5-5 0 3-2.5 5-5.5 5zm0 0c0-3-2.5-5-5.5-5 0 3 2.5 5 5.5 5zm0 0v12M5 22h14"/></svg></span>
+        <h3 class="font-bold text-lg mt-5">Garden Maintenance</h3>
+        <p class="text-sm text-mute mt-2 leading-relaxed">Regular visits that keep everything tidy year-round — one-off or on a schedule that suits you.</p>
+      </div>
+      <div class="rv card card-hover rounded-2xl p-7" style="transition-delay:.06s">
+        <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-limeSoft text-limeDeep"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M4 20c2-6 4-9 8-12 4 3 6 6 8 12M12 8V4"/></svg></span>
+        <h3 class="font-bold text-lg mt-5">Lawn Care</h3>
+        <p class="text-sm text-mute mt-2 leading-relaxed">Mowing, edging and feeding for a lawn that looks freshly done every week of the season.</p>
+      </div>
+      <div class="rv card card-hover rounded-2xl p-7" style="transition-delay:.12s">
+        <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-limeSoft text-limeDeep"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 4.5l5 5M8 21l-5-5L14.5 4.5a3.5 3.5 0 0 1 5 5L8 21zM3 16l5 5"/></svg></span>
+        <h3 class="font-bold text-lg mt-5">Overgrown Garden Clearance</h3>
+        <p class="text-sm text-mute mt-2 leading-relaxed">Our speciality: heavy cutting back, brambles, weeds — from jungle back to garden.</p>
+      </div>
+      <div class="rv card card-hover rounded-2xl p-7">
+        <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-limeSoft text-limeDeep"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V12m0 0a5 5 0 0 1 5-5h5v2a5 5 0 0 1-5 5h-5zm0-3a5 5 0 0 0-5-5H2v1a5 5 0 0 0 5 5h5"/></svg></span>
+        <h3 class="font-bold text-lg mt-5">Planting &amp; Plant Advice</h3>
+        <p class="text-sm text-mute mt-2 leading-relaxed">Honest advice on what will thrive in your space — we source, plant and prepare the soil.</p>
+      </div>
+      <div class="rv card card-hover rounded-2xl p-7" style="transition-delay:.06s">
+        <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-limeSoft text-limeDeep"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M4 12c0-4 2-7 8-7s8 3 8 7M4 12c0 4 2 7 8 7s8-3 8-7"/></svg></span>
+        <h3 class="font-bold text-lg mt-5">Hedge &amp; Shrub Trimming</h3>
+        <p class="text-sm text-mute mt-2 leading-relaxed">Sharp, even hedges and healthy shrubs — shaped properly, at the right time of year.</p>
+      </div>
+      <div class="rv card card-hover rounded-2xl p-7" style="transition-delay:.12s">
+        <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-limeSoft text-limeDeep"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2m-9 0l1 14h8l1-14M10 11v6M14 11v6"/></svg></span>
+        <h3 class="font-bold text-lg mt-5">Garden Waste Removal</h3>
+        <p class="text-sm text-mute mt-2 leading-relaxed">Everything we cut, we take away. You keep the garden — not the mess.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BEFORE / AFTER ============ -->
+<section id="results" class="py-20 bg-navy text-white">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="rv mono-label text-lime">Real results</span>
+      <h2 class="rv display-it text-3xl sm:text-5xl mt-3">The Impeccable difference.</h2>
+      <p class="rv text-white/60 mt-5">Drag the slider — this is what “from overgrown to immaculate” means.</p>
+    </div>
+    <div class="rv max-w-3xl mx-auto mt-12">
+      <div class="ba rounded-2xl aspect-[16/10] border border-white/10" data-ba>
+        <!-- BEFORE (Platzhalter bis echte Fotos da sind) -->
+        <div class="absolute inset-0 grid place-items-center" style="background:linear-gradient(135deg,#3a3d2e,#57543a 55%,#6b6242)">
+          <div class="text-center px-6">
+            <p class="display-it text-2xl text-white/85">Overgrown</p>
+            <p class="text-white/55 text-sm mt-2">Real project photo coming here</p>
+          </div>
+        </div>
+        <!-- AFTER -->
+        <div class="ba-after grid place-items-center" style="background:linear-gradient(135deg,#295c2b,#4d8b31 55%,#8CC63F)">
+          <div class="text-center px-6">
+            <p class="display-it text-2xl text-white">Immaculate</p>
+            <p class="text-white/75 text-sm mt-2">Real project photo coming here</p>
+          </div>
+        </div>
+        <span class="ba-tag left-4 bg-black/45 text-white">Before</span>
+        <span class="ba-tag right-4 bg-lime text-navy" style="left:auto">After</span>
+        <div class="ba-handle"><span class="ba-knob"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span></div>
+      </div>
+      <p class="text-center text-white/45 text-xs mt-4">More transformations on <a href="https://www.instagram.com/impeccablegardens" class="text-lime hover:underline" rel="noopener" target="_blank">Instagram @impeccablegardens</a></p>
+    </div>
+    <!-- Stats -->
+    <div class="rv grid grid-cols-3 gap-px bg-white/10 mt-14 rounded-2xl overflow-hidden border border-white/10 max-w-3xl mx-auto">
+      <div class="bg-navy2 py-8 text-center"><div class="display-it text-3xl sm:text-4xl text-lime" data-count="5.0" data-suffix="">5.0</div><div class="mono-label text-white/50 mt-2">Google rating</div></div>
+      <div class="bg-navy2 py-8 text-center"><div class="display-it text-3xl sm:text-4xl text-lime" data-count="35" data-suffix="">35</div><div class="mono-label text-white/50 mt-2">5-star reviews</div></div>
+      <div class="bg-navy2 py-8 text-center"><div class="display-it text-3xl sm:text-4xl text-lime" data-count="24" data-suffix="h">24h</div><div class="mono-label text-white/50 mt-2">Quote response</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section id="reviews" class="py-20">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="rv mono-label text-limeDeep">Reviews</span>
+      <h2 class="rv display-it text-3xl sm:text-5xl mt-3">Rated 5.0 — by people like you.</h2>
+      <p class="rv text-mute mt-5">Every review below is public on our <a href="https://www.google.com/maps/place/Impeccable+Gardens/@51.5286416,-0.1015987,11z" class="text-blueDeep hover:underline" rel="noopener" target="_blank">Google profile</a>. Nothing curated, nothing invented.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5 mt-14">
+      <figure class="rv card card-hover rounded-2xl p-7 flex flex-col">
+        <span class="star text-lg">★★★★★</span>
+        <blockquote class="text-[15px] leading-relaxed mt-4 flex-1">“Ubaid worked really hard on my garden. It needed a lot of cutting back and clearing. He did a great job and I would highly recommend him.”</blockquote>
+        <figcaption class="mt-5 text-sm"><strong>Ellie B.</strong> <span class="text-mute">· via Google</span></figcaption>
+      </figure>
+      <figure class="rv card card-hover rounded-2xl p-7 flex flex-col" style="transition-delay:.07s">
+        <span class="star text-lg">★★★★★</span>
+        <blockquote class="text-[15px] leading-relaxed mt-4 flex-1">“Very responsive with planning and gave me advice on which plants would work well. He collected the plants and changed the soil for us, taking all garden waste away. We were delighted with the result.”</blockquote>
+        <figcaption class="mt-5 text-sm"><strong>Stephen M.</strong> <span class="text-mute">· via Google</span></figcaption>
+      </figure>
+      <figure class="rv card card-hover rounded-2xl p-7 flex flex-col" style="transition-delay:.14s">
+        <span class="star text-lg">★★★★★</span>
+        <blockquote class="text-[15px] leading-relaxed mt-4 flex-1">“Truly the best gardening service I’ve ever had! Ubaid went above and beyond to make my lawn look perfect, I cannot stress how much I recommend this service!!”</blockquote>
+        <figcaption class="mt-5 text-sm"><strong>Nicole P.</strong> <span class="text-mute">· via Google</span></figcaption>
+      </figure>
+    </div>
+    <div class="rv text-center mt-10">
+      <a href="https://www.google.com/maps/place/Impeccable+Gardens/@51.5286416,-0.1015987,11z" rel="noopener" target="_blank" class="mono-label inline-flex items-center gap-2 border border-line rounded-full px-5 py-2.5 text-mute hover:border-lime/50 hover:text-ink transition">
+        Read all 35 reviews on Google
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="steps-section py-20 bg-white border-y border-line">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="rv mono-label text-limeDeep">How it works</span>
+      <h2 class="rv display-it text-3xl sm:text-5xl mt-3">Three steps. No hassle.</h2>
+    </div>
+    <div class="relative mt-16 max-w-4xl mx-auto">
+      <div class="step-line hidden md:block absolute top-6 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-lime via-limeDeep to-blue"></div>
+      <div class="grid md:grid-cols-3 gap-10 relative">
+        <div class="rv text-center">
+          <span class="relative inline-grid place-items-center w-12 h-12 rounded-full bg-lime text-navy font-bold text-lg shadow-lg shadow-lime/30">1</span>
+          <h3 class="font-bold text-lg mt-5">Message or call</h3>
+          <p class="text-sm text-mute mt-2 leading-relaxed">WhatsApp a few photos of your garden, or just give Ubaid a ring.</p>
+        </div>
+        <div class="rv text-center" style="transition-delay:.1s">
+          <span class="relative inline-grid place-items-center w-12 h-12 rounded-full bg-limeDeep text-white font-bold text-lg shadow-lg shadow-limeDeep/30">2</span>
+          <h3 class="font-bold text-lg mt-5">Free quote in 24h</h3>
+          <p class="text-sm text-mute mt-2 leading-relaxed">A clear, fair price — no obligation, no pressure, no surprises later.</p>
+        </div>
+        <div class="rv text-center" style="transition-delay:.2s">
+          <span class="relative inline-grid place-items-center w-12 h-12 rounded-full bg-blue text-white font-bold text-lg shadow-lg shadow-blue/30">3</span>
+          <h3 class="font-bold text-lg mt-5">Garden, transformed</h3>
+          <p class="text-sm text-mute mt-2 leading-relaxed">We do the work, take all the waste away and leave everything immaculate.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AREAS ============ -->
+<section id="areas" class="py-20">
+  <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <span class="rv mono-label text-limeDeep">Areas we cover</span>
+      <h2 class="rv display-it text-3xl sm:text-4xl mt-3">London &amp; Kent — we come to you.</h2>
+      <p class="rv text-mute mt-5 leading-relaxed">Based locally, working across North London, the wider London area and into Kent. Not sure if we cover your street? Send a message — if we can’t make it, we’ll tell you straight away.</p>
+      <div class="rv flex flex-wrap gap-2 mt-7">
+        <span class="mono-label bg-limeSoft text-limeDeep rounded-full px-4 py-2">North London</span>
+        <span class="mono-label bg-limeSoft text-limeDeep rounded-full px-4 py-2">Greater London</span>
+        <span class="mono-label bg-limeSoft text-limeDeep rounded-full px-4 py-2">Kent</span>
+        <span class="mono-label bg-white border border-line text-mute rounded-full px-4 py-2">+ surrounding areas</span>
+      </div>
+    </div>
+    <div class="rv card card-hover rounded-2xl p-8 text-center">
+      <span class="inline-grid place-items-center w-14 h-14 rounded-2xl bg-navy text-lime mx-auto"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+      <h3 class="font-bold text-xl mt-5">Your local gardener</h3>
+      <p class="text-sm text-mute mt-3 leading-relaxed">Reviews on our Google profile call us “local” and “speedy” — because being nearby means we turn up when we say we will.</p>
+      <a href="https://wa.me/447554893598?text=Hi%2C%20do%20you%20cover%20my%20area%3F" class="cta-primary mt-6 inline-flex items-center gap-2.5 font-bold px-6 py-3 rounded-full">
+        Check your area
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="py-20 bg-white border-y border-line">
+  <div class="max-w-4xl mx-auto px-5 grid md:grid-cols-5 gap-10 items-center">
+    <div class="rv md:col-span-2">
+      <div class="aspect-[4/5] rounded-2xl bg-gradient-to-br from-navy to-navy2 grid place-items-center text-center p-6">
+        <div>
+          <span class="display-it text-4xl text-lime">U</span>
+          <p class="text-white/60 text-sm mt-3">Photo of Ubaid coming soon</p>
+        </div>
+      </div>
+    </div>
+    <div class="md:col-span-3">
+      <span class="rv mono-label text-limeDeep">Who you’re dealing with</span>
+      <h2 class="rv display-it text-3xl sm:text-4xl mt-3">Meet Ubaid.</h2>
+      <p class="rv text-mute mt-5 leading-relaxed">No call centres, no rotating crews — when you book Impeccable Gardens, you deal directly with Ubaid. Customers mention him by name in almost every review: hard-working, responsive, honest about what your garden actually needs.</p>
+      <ul class="rv mt-6 space-y-3 text-sm">
+        <li class="flex gap-3"><span class="text-limeDeep mt-0.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></span> Direct contact — the person you message is the person who shows up</li>
+        <li class="flex gap-3"><span class="text-limeDeep mt-0.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></span> Honest plant &amp; garden advice before any work starts</li>
+        <li class="flex gap-3"><span class="text-limeDeep mt-0.5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6L9 17l-5-5"/></svg></span> All waste taken away — your garden is left tidy, every time</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="py-20">
+  <div class="max-w-3xl mx-auto px-5">
+    <h2 class="rv display-it text-3xl sm:text-4xl text-center">Questions people ask us</h2>
+    <div class="mt-12 space-y-3">
+      <div class="rv faq card rounded-xl">
+        <button class="faq-toggle w-full flex items-center justify-between text-left px-6 py-5">
+          <span class="font-semibold">How much does it cost?</span>
+          <span class="faq-icon text-limeDeep text-xl leading-none">+</span>
+        </button>
+        <div class="faq-body px-6"><p class="pb-5 text-mute text-sm leading-relaxed">Every garden is different, so we quote per job — free, within 24 hours, and with no obligation. Send a few photos on WhatsApp and you’ll get a clear price before anything starts.</p></div>
+      </div>
+      <div class="rv faq card rounded-xl" style="transition-delay:.05s">
+        <button class="faq-toggle w-full flex items-center justify-between text-left px-6 py-5">
+          <span class="font-semibold">Do you cover my area?</span>
+          <span class="faq-icon text-limeDeep text-xl leading-none">+</span>
+        </button>
+        <div class="faq-body px-6"><p class="pb-5 text-mute text-sm leading-relaxed">We work across London and Kent. If you’re on the edge of that, just ask — we’ll give you a straight answer right away.</p></div>
+      </div>
+      <div class="rv faq card rounded-xl" style="transition-delay:.1s">
+        <button class="faq-toggle w-full flex items-center justify-between text-left px-6 py-5">
+          <span class="font-semibold">What happens to the garden waste?</span>
+          <span class="faq-icon text-limeDeep text-xl leading-none">+</span>
+        </button>
+        <div class="faq-body px-6"><p class="pb-5 text-mute text-sm leading-relaxed">We take it with us. Clippings, brambles, old soil — it all leaves with us, so you’re not left with bags by the bins.</p></div>
+      </div>
+      <div class="rv faq card rounded-xl" style="transition-delay:.15s">
+        <button class="faq-toggle w-full flex items-center justify-between text-left px-6 py-5">
+          <span class="font-semibold">My garden is completely overgrown — is that a problem?</span>
+          <span class="faq-icon text-limeDeep text-xl leading-none">+</span>
+        </button>
+        <div class="faq-body px-6"><p class="pb-5 text-mute text-sm leading-relaxed">That’s our favourite kind of job. “From overgrown to immaculate” is literally what we do — no garden is too far gone.</p></div>
+      </div>
+      <div class="rv faq card rounded-xl" style="transition-delay:.2s">
+        <button class="faq-toggle w-full flex items-center justify-between text-left px-6 py-5">
+          <span class="font-semibold">How quickly can you come?</span>
+          <span class="faq-icon text-limeDeep text-xl leading-none">+</span>
+        </button>
+        <div class="faq-body px-6"><p class="pb-5 text-mute text-sm leading-relaxed">You’ll have a quote within 24 hours, and reviews regularly mention our speedy work. Tell us when suits you and we’ll find the earliest slot.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section id="contact" class="py-24 bg-navy text-white relative overflow-hidden">
+  <div class="orb absolute -bottom-24 left-[15%] w-[420px] h-[420px] rounded-full bg-lime/15 blur-[130px] pointer-events-none" aria-hidden="true"></div>
+  <div class="relative max-w-3xl mx-auto px-5 text-center">
+    <h2 class="rv display-it text-4xl sm:text-6xl leading-[1.05]">Ready for an<br><span class="text-lime">impeccable</span> garden?</h2>
+    <p class="rv text-white/65 mt-6 max-w-xl mx-auto">Send a photo of your garden today — you’ll have a free, no-obligation quote within 24 hours.</p>
+    <div class="rv mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="https://wa.me/447554893598?text=Hi%2C%20I%27d%20like%20a%20free%20quote%20for%20my%20garden" class="cta-primary font-bold pl-7 pr-2 py-2.5 rounded-full inline-flex items-center gap-3 justify-center">
+        WhatsApp us a photo
+        <span class="cta-arrow grid place-items-center w-9 h-9 rounded-full bg-navy/15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a href="tel:+447554893598" class="cta-ghost font-semibold px-7 py-3.5 rounded-full border border-white/25 inline-flex items-center gap-2.5 justify-center">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.5 2.9.7a2 2 0 0 1 1.6 2z"/></svg>
+        07554 893598
+      </a>
+    </div>
+    <p class="rv mono-label text-white/40 mt-6">Free quote · No obligation · Response within 24h</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-navy border-t border-white/10 py-12 text-white pb-28 md:pb-12">
+  <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <a href="#top" class="leading-none text-center sm:text-left">
+      <span class="display-it text-[19px]">IMPECCABLE</span>
+      <span class="block wordmark-sub text-[9px] text-lime mt-0.5">GARDENS</span>
+    </a>
+    <div class="flex items-center gap-6 text-sm text-white/60">
+      <a href="tel:+447554893598" class="hover:text-white transition">07554 893598</a>
+      <a href="https://wa.me/447554893598" class="hover:text-white transition" rel="noopener" target="_blank">WhatsApp</a>
+      <a href="https://www.instagram.com/impeccablegardens" class="hover:text-white transition" rel="noopener" target="_blank">Instagram</a>
+    </div>
+    <p class="mono-label text-white/35">© 2026 Impeccable Gardens · London &amp; Kent</p>
+  </div>
+</footer>
+
+<!-- ============ MOBILE STICKY CALL BAR ============ -->
+<div id="callbar" class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-navy/95 backdrop-blur-md border-t border-white/10 px-4 py-3 grid grid-cols-2 gap-3">
+  <a href="tel:+447554893598" class="cta-ghost border border-white/25 text-white font-semibold rounded-full py-3 text-center text-sm inline-flex items-center justify-center gap-2">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.5 2.9.7a2 2 0 0 1 1.6 2z"/></svg>
+    Call
+  </a>
+  <a href="https://wa.me/447554893598?text=Hi%2C%20I%27d%20like%20a%20free%20quote%20for%20my%20garden" class="cta-primary font-bold rounded-full py-3 text-center text-sm">Free quote</a>
+</div>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ----- Nav shadow -----
+  var nav = document.getElementById('nav');
+  function onNavScroll(){ nav.classList.toggle('scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onNavScroll, { passive:true }); onNavScroll();
+
+  // ----- Scroll progress -----
+  var prog = document.getElementById('scroll-progress');
+  function onProg(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    prog.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+  }
+  window.addEventListener('scroll', onProg, { passive:true });
+  window.addEventListener('resize', onProg, { passive:true });
+  onProg();
+
+  // ----- Reveal on scroll -----
+  var rvs = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    rvs.forEach(function(el){ io.observe(el); });
+  } else {
+    rvs.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // ----- Steps line -----
+  var steps = document.querySelector('.steps-section');
+  if (steps && 'IntersectionObserver' in window) {
+    var sio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { steps.classList.add('is-visible'); sio.disconnect(); } });
+    }, { threshold: 0.3 });
+    sio.observe(steps);
+  }
+
+  // ----- Count-up -----
+  function animateCount(el){
+    var target = parseFloat(el.dataset.count);
+    if (isNaN(target)) return;
+    var suffix = el.dataset.suffix || '';
+    var dur = 1400, t0 = null;
+    function frame(ts){
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = target * eased;
+      el.textContent = (target % 1 === 0 ? Math.round(val) : val.toFixed(1)) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  var counters = document.querySelectorAll('[data-count]');
+  if (counters.length && 'IntersectionObserver' in window && !reduceMotion) {
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) { animateCount(entry.target); cio.unobserve(entry.target); }
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function(el){ cio.observe(el); });
+  }
+
+  // ----- Before/After slider (Maus + Touch) -----
+  document.querySelectorAll('[data-ba]').forEach(function(ba){
+    var dragging = false;
+    function setCut(clientX){
+      var r = ba.getBoundingClientRect();
+      var pct = Math.min(96, Math.max(4, ((clientX - r.left) / r.width) * 100));
+      ba.style.setProperty('--cut', pct + '%');
+    }
+    ba.addEventListener('pointerdown', function(e){ dragging = true; ba.setPointerCapture(e.pointerId); setCut(e.clientX); });
+    ba.addEventListener('pointermove', function(e){ if (dragging) setCut(e.clientX); });
+    ba.addEventListener('pointerup', function(){ dragging = false; });
+    ba.addEventListener('pointercancel', function(){ dragging = false; });
+  });
+
+  // ----- FAQ accordion -----
+  document.querySelectorAll('.faq-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var faq = btn.closest('.faq');
+      var body = faq.querySelector('.faq-body');
+      var isOpen = faq.classList.contains('open');
+      if (isOpen) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        void body.offsetHeight;
+        faq.classList.remove('open');
+        body.style.maxHeight = '0';
+      } else {
+        faq.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+        body.addEventListener('transitionend', function onEnd(e){
+          if (e.propertyName !== 'max-height') return;
+          if (faq.classList.contains('open')) body.style.maxHeight = 'none';
+          body.removeEventListener('transitionend', onEnd);
+        });
+      }
+    });
+  });
+
+  // ----- Mobile call bar: erst nach dem Hero einblenden -----
+  var callbar = document.getElementById('callbar');
+  if (callbar) {
+    function onBar(){ callbar.classList.toggle('show', window.scrollY > 420); }
+    window.addEventListener('scroll', onBar, { passive:true }); onBar();
+  }
+
+  // ----- Card spotlight position -----
+  if (window.matchMedia('(pointer: fine)').matches && !reduceMotion) {
+    document.querySelectorAll('.card-hover').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

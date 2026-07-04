@@ -256,16 +256,16 @@
     </div>
     <div class="rv max-w-3xl mx-auto mt-12">
       <div class="ba rounded-2xl aspect-[16/10] border border-white/10" data-ba>
-        <!-- BEFORE (Platzhalter bis echte Fotos da sind) -->
-        <div class="absolute inset-0 grid place-items-center" style="background:linear-gradient(135deg,#3a3d2e,#57543a 55%,#6b6242)">
-          <div class="text-center px-6">
+        <!-- BEFORE (Platzhalter bis echte Fotos da sind) — Text links, damit er sich nicht mit dem After-Text überlagert -->
+        <div class="absolute inset-0" style="background:linear-gradient(135deg,#3a3d2e,#57543a 55%,#6b6242)">
+          <div class="absolute left-[7%] top-1/2 -translate-y-1/2 max-w-[38%]">
             <p class="display-it text-2xl text-white/85">Overgrown</p>
             <p class="text-white/55 text-sm mt-2">Real project photo coming here</p>
           </div>
         </div>
-        <!-- AFTER -->
-        <div class="ba-after grid place-items-center" style="background:linear-gradient(135deg,#295c2b,#4d8b31 55%,#8CC63F)">
-          <div class="text-center px-6">
+        <!-- AFTER — Text rechts -->
+        <div class="ba-after" style="background:linear-gradient(135deg,#295c2b,#4d8b31 55%,#8CC63F)">
+          <div class="absolute right-[7%] top-1/2 -translate-y-1/2 max-w-[38%] text-right">
             <p class="display-it text-2xl text-white">Immaculate</p>
             <p class="text-white/75 text-sm mt-2">Real project photo coming here</p>
           </div>
@@ -533,13 +533,15 @@
     var target = parseFloat(el.dataset.count);
     if (isNaN(target)) return;
     var suffix = el.dataset.suffix || '';
+    // Dezimalstellen aus dem data-Attribut ableiten, damit "5.0" nicht zu "5" wird
+    var decimals = (String(el.dataset.count).split('.')[1] || '').length;
     var dur = 1400, t0 = null;
     function frame(ts){
       if (!t0) t0 = ts;
       var p = Math.min(1, (ts - t0) / dur);
       var eased = 1 - Math.pow(1 - p, 3);
       var val = target * eased;
-      el.textContent = (target % 1 === 0 ? Math.round(val) : val.toFixed(1)) + suffix;
+      el.textContent = (decimals ? val.toFixed(decimals) : Math.round(val)) + suffix;
       if (p < 1) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
